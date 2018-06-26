@@ -5,6 +5,7 @@ var mongoose = require("mongoose");
 var axios = require("axios");
 var cheerio = require("cheerio");
 var db = require("./models");
+Promise = mongoose.Promise;
 
 var PORT = 3000;
 var app = express();
@@ -68,18 +69,17 @@ app.get("/articles", function(req, res) {
 
 app.get("/articles/:id", function(req, res) {
   let articleId = req.params.id;
-  db.article.findById(articleId)
+  db.Article.findById(articleId)
     .populate("note")
-    .then(article => res.json(article)
+    .then(article => res.json(article))
     .catch(err => res.json(err))
-  )
 });
 
 // Route for saving/updating an Article's associated Note
 app.post("/articles/:id", function(req, res) {
   db.Note.create(req.body)
     .then(function(dbNote) {
-      return db.Article.findOneAndUpdate({_id: req.params.id}, { $push: {note: dbNote._id} }, {new: true});
+      return db.Article.findOneAndUpdate({_id: req.params.id}, { $set: {note: dbNote._id} }, {new: true});
     })
     .then(function(dbArticleNote) {
       res.json(dbArticleNote);
@@ -90,6 +90,13 @@ app.post("/articles/:id", function(req, res) {
     })
 });
 
+app.delete("/notes/:id", function(req, res) {
+  db.Note.findByIdAndRemove(req.params.id)
+  .populate("article")
+  .then(note => res.json(note))
+  .catch(err => res.json(err))
+})
+ 
 // Start the server
 app.listen(PORT, function() {
   console.log("App running on port " + PORT + "!");
