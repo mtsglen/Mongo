@@ -9,6 +9,10 @@ Promise = mongoose.Promise;
 
 var PORT = 3000;
 var app = express();
+var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mongoHeadlines";
+
+mongoose.connect(MONGODB_URI);
+
 
 app.use(logger("dev"));
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -17,7 +21,7 @@ app.use(express.static("public"));
 
 
 // Connect to the Mongo DB
-mongoose.connect("mongodb://localhost/Mongo");
+// mongoose.connect("mongodb://localhost/Mongo");
 
 // Routes
 
