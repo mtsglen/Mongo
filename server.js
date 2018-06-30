@@ -26,16 +26,16 @@ if(process.env.MONGDB_URI) {
   mongoose.connect(databaseURI);
 }
 
-var dbs = mongoose.connection;
+// var dbs = mongoose.connection;
 
-dbs.on('error', function(err) {
-  console.log('Mongoose Error: ', err);
+// dbs.on('error', function(err) {
+//   console.log('Mongoose Error: ', err);
   
-});
+// });
 
-dbs.once('open', function() {
-  console.log('Mongoose connection successful');
-})
+// dbs.once('open', function() {
+//   console.log('Mongoose connection successful');
+// })
 
 // Connect to the Mongo DB
 // mongoose.connect("mongodb://localhost/Mongo");
