@@ -9,12 +9,8 @@ var db = require("./models");
 var PORT = process.env.PORT || 3000;
 var app = express();
 
-
-// mongoose.connect(MONGODB_URI);
-
-
 app.use(logger("dev"));
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static("public"));
 
 var databaseUri = mongoose.connect('mongodb://localhost/Mongo');
@@ -23,7 +19,7 @@ if(process.env.MONGDB_URI) {
 
   mongoose.connect(process.env.MONGODB_URI);
 } else {
-  mongoose.connect(databaseURI);
+  mongoose.connect(databaseUri);
 }
 
 // var dbs = mongoose.connection;
