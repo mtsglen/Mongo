@@ -15,7 +15,7 @@ app.use(express.static("public"));
 
 var databaseUri = mongoose.connect('mongodb://localhost/Mongo');
 
-if(process.env.MONGDB_URI) {
+if(process.env.MONGODB_URI) {
 
   mongoose.connect(process.env.MONGODB_URI);
 } else {
