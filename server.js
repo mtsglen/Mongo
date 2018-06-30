@@ -5,20 +5,37 @@ var mongoose = require("mongoose");
 var axios = require("axios");
 var cheerio = require("cheerio");
 var db = require("./models");
-Promise = mongoose.Promise;
 
-var PORT = 3000;
+var PORT = process.env.PORT || 3000;
 var app = express();
-var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mongoHeadlines";
 
-mongoose.connect(MONGODB_URI);
+
+// mongoose.connect(MONGODB_URI);
 
 
 app.use(logger("dev"));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
+var databaseUri = mongoose.connect('mongodb://localhost/Mongo');
 
+if(process.env.MONGDB_URI) {
+
+  mongoose.connect(process.env.MONGODB_URI);
+} else {
+  mongoose.connect(databaseURI);
+}
+
+var dbs = mongoose.connection;
+
+dbs.on('error', function(err) {
+  console.log('Mongoose Error: ', err);
+  
+});
+
+dbs.once('open', function() {
+  console.log('Mongoose connection successful');
+})
 
 // Connect to the Mongo DB
 // mongoose.connect("mongodb://localhost/Mongo");
