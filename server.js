@@ -13,7 +13,7 @@ app.use(logger("dev"));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static("public"));
 
-var databaseUri = mongoose.connect('mongodb://localhost/Mongo');
+var databaseUri = mongoose.connect('mongodb://heroku_l20tc740":Gogriz09!@ds223161.mlab.com:23161/heroku_l20tc740');
 
 if(process.env.MONGODB_URI) {
 
