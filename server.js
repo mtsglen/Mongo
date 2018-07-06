@@ -13,12 +13,16 @@ var app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
-var databaseUri = mongoose.connect('mongodb://localhost/Mongo');
+// var databaseUri = mongoose.connect('mongodb://localhost/Mongo');
+
+// Levi changed this on 7/6 this is what he has!!!!!!!!!!!!!!!!!!!!! vs. what is above 
+var databaseUri = 'mongodb://localhost/Mongo';
+
 
 if(process.env.MONGODB_URI) {
 
   mongoose.connect(process.env.MONGODB_URI || "mongodb://heroku_l20tc740:Gogriz09!@ds223161.mlab.com:23161/heroku_l20tc740");
-  
+
 } else {
   mongoose.connect(databaseUri)
   .then(function(connection){
