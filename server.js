@@ -19,7 +19,13 @@ if(process.env.MONGODB_URI) {
 
   mongoose.connect(process.env.MONGODB_URI || "mongodb://heroku_l20tc740:Gogriz09!@ds223161.mlab.com:23161/heroku_l20tc740");
 } else {
-  mongoose.connect(databaseUri);
+  mongoose.connect(databaseUri)
+  .then(function(connection){
+    console.log(('Mongo connect Success'));
+  })
+  .catch(function(error){
+    console.log("Mongo connect error: ", error.message);
+  })
 }
 
 // var dbs = mongoose.connection;
