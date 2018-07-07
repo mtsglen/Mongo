@@ -18,10 +18,7 @@ app.use(express.static("public"));
 var databaseUri = 'mongodb://localhost/Mongo';
 
 if(process.env.MONGODB_URI) {
-
   mongoose.connect(process.env.MONGODB_URI);
-    // || "mongodb://heroku_l20tc740:Password1!@ds223161.mlab.com:23161/heroku_l20tc740");
-
 } else {
   mongoose.connect(databaseUri)
   .then(function(connection){
