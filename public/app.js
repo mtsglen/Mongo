@@ -1,9 +1,9 @@
 $("#scrape").on("click", function() {
-  // $.get("/scrape", function(data) {
+  $.get("/scrape", function(data) {
 
     $("#articles").empty();
     // function scraperesult () {
-      $.getJSON("/scrape", data => {
+      $.getJSON("/articles", data => {
         for (var i = 0; i < data.length; i++) {
           let articleCont = "<div class='article-container' data-id=" + data[i]._id + ">"
           let articlediv = "<div class='articlediv' data-id=" + data[i]._id + ">";
@@ -18,8 +18,8 @@ $("#scrape").on("click", function() {
       })
     // }
     // scraperesult ();
-  })
-// });
+  });
+});
 
 
 
