@@ -3,7 +3,7 @@ $("#scrape").on("click", function() {
 
     $("#articles").empty();
     // function scraperesult () {
-      $.getJSON("/articles", data => {
+      $.getJSON("/scrape", data => {
         for (var i = 0; i < data.length; i++) {
           let articleCont = "<div class='article-container' data-id=" + data[i]._id + ">"
           let articlediv = "<div class='articlediv' data-id=" + data[i]._id + ">";

@@ -17,20 +17,20 @@ app.use(express.static("public"));
 
 var databaseUri = 'mongodb://localhost/Mongo';
 
-if(process.env.MONGODB_URI) {
+if (process.env.MONGODB_URI) {
   mongoose.connect(process.env.MONGODB_URI)
-    .then(function(connection){
+    .then(function (connection) {
       console.log(('Mongo connect Success'));
     })
-    .catch(function(error){
+    .catch(function (error) {
       console.log("Mongo connect error: ", error.message);
     })
 } else {
   mongoose.connect(databaseUri)
-    .then(function(connection){
+    .then(function (connection) {
       console.log(('Mongo connect Success'));
     })
-    .catch(function(error){
+    .catch(function (error) {
       console.log("Mongo connect error: ", error.message);
     })
 }
@@ -39,7 +39,7 @@ if(process.env.MONGODB_URI) {
 
 // dbs.on('error', function(err) {
 //   console.log('Mongoose Error: ', err);
-  
+
 // });
 
 // dbs.once('open', function() {
@@ -51,53 +51,54 @@ if(process.env.MONGODB_URI) {
 
 // Routes
 
-app.get("/scrape", function(req, res) {
+app.get("/scrape", function (req, res) {
   console.log("scrape");
-  
-  axios.get("https://www.wired.com/").then(function(response) {
-    var $ = cheerio.load(response.data);
-    // console.log(response.data);
-    
-    $(".card-component").each(function(i, element) {
-      console.log("___________________");
-      
-      var result = {};
-      result.title = $(this)
-        .find("h2")
-        .text();
-        
-      result.link = 'https://www.wired.com' + $(this)
-        .find("a")
-        .attr("href");
+
+  axios.get("https://www.wired.com/")
+    .then(function (response) {
+      var $ = cheerio.load(response.data);
+      // console.log(response.data);
+
+      $(".card-component").each(function (i, element) {
+        console.log("___________________");
+
+        var result = {};
+        result.title = $(this)
+          .find("h2")
+          .text();
+
+        result.link = 'https://www.wired.com' + $(this)
+          .find("a")
+          .attr("href");
         // console.log(result.link);
 
-      console.log("Result" + JSON.stringify(result));
+        console.log("Result" + JSON.stringify(result));
 
-      db.Article.create(result)
-        .then(function(dbArticle) {
-          console.log(dbArticle);
-        })
-        .catch(function(err) {
-          // console.log(err);
-          
-          // return res.json(err);
-        });
+        db.Article.create(result)
+          .then(function (dbArticle) {
+            console.log(dbArticle);
+          })
+          .catch(function (err) {
+            // console.log(err);
+
+            // return res.json(err);
+          });
+      });
+      res.send("Scrape Complete");
     });
-    res.send("Scrape Complete");
-  });
 });
 
 // Route for getting all Articles from the db
-app.get("/articles", function(req, res) {
+app.get("/articles", function (req, res) {
   db.Article.find({}).then(dbArticle => {
     res.json(dbArticle)
   })
-  .catch(err => {
-    res.json(err)
-  })
+    .catch(err => {
+      res.json(err)
+    })
 });
 
-app.get("/articles/:id", function(req, res) {
+app.get("/articles/:id", function (req, res) {
   let articleId = req.params.id;
   db.Article.findById(articleId)
     .populate("note")
@@ -106,28 +107,28 @@ app.get("/articles/:id", function(req, res) {
 });
 
 // Route for saving/updating an Article's associated Note
-app.post("/articles/:id", function(req, res) {
+app.post("/articles/:id", function (req, res) {
   db.Note.create(req.body)
-    .then(function(dbNote) {
-      return db.Article.findOneAndUpdate({_id: req.params.id}, { $set: {note: dbNote._id} }, {new: true});
+    .then(function (dbNote) {
+      return db.Article.findOneAndUpdate({ _id: req.params.id }, { $set: { note: dbNote._id } }, { new: true });
     })
-    .then(function(dbArticleNote) {
+    .then(function (dbArticleNote) {
       res.json(dbArticleNote);
 
     })
-    .catch(function(err) {
+    .catch(function (err) {
       res.json(err);
     })
 });
 
-app.delete("/notes/:id", function(req, res) {
+app.delete("/notes/:id", function (req, res) {
   db.Note.findByIdAndRemove(req.params.id)
-  .populate("article")
-  .then(note => res.json(note))
-  .catch(err => res.json(err))
+    .populate("article")
+    .then(note => res.json(note))
+    .catch(err => res.json(err))
 })
- 
+
 // Start the server
-app.listen(PORT, function() {
+app.listen(PORT, function () {
   console.log("App running on port " + PORT + "!");
 });
