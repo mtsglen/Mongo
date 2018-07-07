@@ -18,15 +18,21 @@ app.use(express.static("public"));
 var databaseUri = 'mongodb://localhost/Mongo';
 
 if(process.env.MONGODB_URI) {
-  mongoose.connect(process.env.MONGODB_URI);
+  mongoose.connect(process.env.MONGODB_URI)
+    .then(function(connection){
+      console.log(('Mongo connect Success'));
+    })
+    .catch(function(error){
+      console.log("Mongo connect error: ", error.message);
+    })
 } else {
   mongoose.connect(databaseUri)
-  .then(function(connection){
-    console.log(('Mongo connect Success'));
-  })
-  .catch(function(error){
-    console.log("Mongo connect error: ", error.message);
-  })
+    .then(function(connection){
+      console.log(('Mongo connect Success'));
+    })
+    .catch(function(error){
+      console.log("Mongo connect error: ", error.message);
+    })
 }
 
 // var dbs = mongoose.connection;
